@@ -6,6 +6,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "printf.h"
+#include <limits.h>
+#include <stddef.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <unistd.h>
 
 void *os_malloc(size_t size);
 void os_free(void *ptr);
