@@ -128,7 +128,7 @@ struct block_meta *find_free_block(struct block_meta **last, size_t size)
 	size_t min_dif = 9999999;
 
 	while (current1) {
-		if (!current1->status && current1->size - size >= 0 && current1->size - size < min_dif)
+		if (!current1->status && current1->size - size < min_dif)
 			min_dif = current1->size - size;
 		current1 = current1->next;
 	}
@@ -359,21 +359,23 @@ void *os_realloc(void *ptr, size_t size)
 	if (block->status == STATUS_ALLOC && !block->next && block->size < aligned_size)
 		return (void *)(expand_block(block, aligned_size) + 1);
 
-	if (block->status == STATUS_ALLOC && block->size >= aligned_size)
+	if (block->status == STATUS_ALLOC && block->size >= aligned_size) {
 		if (block->size - aligned_size > META_SIZE)
 			return (void *)(split_block(block, block->size - aligned_size) + 1);
 		else
 			return (void *)(block + 1);
+	}
 
 	size_t old_block_size = block->size;
 
 	while (block->next && !block->next->status) {
 		coalesce_realloc_blocks(block);
-		if (block->status == STATUS_ALLOC && block->size >= aligned_size)
+		if (block->status == STATUS_ALLOC && block->size >= aligned_size) {
 			if (block->size - aligned_size > META_SIZE)
 				return (void *)(split_block(block, block->size - aligned_size) + 1);
 			else
 				return (void *)(block + 1);
+		}
 	}
 
 	if (size > MMAP_THRESHOLD) {
