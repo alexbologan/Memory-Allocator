@@ -160,6 +160,7 @@ struct block_meta *find_free_block(struct block_meta **last, size_t size)
 
 	// Iterate to the block with the smallest size
 	current1 = global_base;
+
 	while (current1 && (current1->status || (current1->size - size) != min_dif)) {
 		*last = current1;
 		current1 = current1->next;
