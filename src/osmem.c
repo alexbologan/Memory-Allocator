@@ -5,7 +5,7 @@
 #include "block_meta.h"
 
 // Define a threshold for using mmap to allocate memory
-#define MMAP_THRESHOLD (128*1024)
+#define MMAP_THRESHOLD (128 * 1024)
 
 // Define the size of the metadata structure for each block
 #define META_SIZE sizeof(struct block_meta)
@@ -14,19 +14,19 @@
 void *global_base;
 
 // Global variable to track the number of heap allocations
-int Heap_alocation;
+size_t Heap_alocation;
 
 // Function to find the minimum of two integers
-int min(int a, int b)
+size_t min(size_t a, size_t b)
 {
 	return (a < b) ? a : b;
 }
 
 // Function to calculate the padding needed for alignment
-int align_offset(int offset)
+size_t align_offset(size_t offset)
 {
-	int padding = (8 - (offset % 8)) % 8;
-	int aligned = offset + padding;
+	size_t padding = (8 - (offset % 8)) % 8;
+	size_t aligned = offset + padding;
 	return aligned;
 }
 
